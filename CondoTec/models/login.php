@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = $_POST['senha'];
 
     // Consulta SQL para verificar as credenciais
-    $sql = "SELECT nome FROM usuarios WHERE email = :email AND senha = :senha";
+    $sql = "SELECT id, nome FROM usuarios WHERE email = :email AND senha = :senha";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':senha', $senha);
@@ -23,11 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtém o nome do usuário
         $row = $stmt->fetch();
         $nomeUsuario = $row['nome'];
+        $id = $row['id'];
         
         // Inicia a sessão e armazena o nome do usuário
         session_start();
         $_SESSION['nomeUsuario'] = $nomeUsuario;
-        
+        $_SESSION['id'] = $id;
         // Redireciona para a página home
         header("Location: ../views/home.php");
         exit();
